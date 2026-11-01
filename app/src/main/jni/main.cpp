@@ -1299,30 +1299,27 @@ void BaseActorRenderer_renderText(void *a1, void *a2, void *a3, void *a4, void *
 
 #include <android/log.h>
 
-// Guarda de version: los offsets de offsets.h son de Minecraft 1.21.111. Si el libminecraftpe.so
-// cargado trae 1.21.110 (u otra) y no 1.21.111, no se hookea nada y el juego abre normal
-// en vez de cerrarse por un offset que apunta a otro lado.
+// Guarda de version por huella (el .so real de 1.21.111.1 solo menciona "1.21.110").
 static bool MineVersionOk() {
-    FILE *maps = fopen("/proc/self/maps", "r");
-    if (!maps) return true; // no se puede comprobar: se deja pasar
-    bool found111 = false, found110 = false;
-    char line[1024];
-    while (fgets(line, sizeof(line), maps)) {
-        if (!strstr(line, "libminecraftpe.so")) continue;
-        unsigned long start = 0, end = 0; char perms[8] = {0};
-        if (sscanf(line, "%lx-%lx %7s", &start, &end, perms) != 3 || perms[0] != 'r') continue;
-        const void *base = reinterpret_cast<const void *>(start);
-        size_t len = end - start;
-        if (memmem(base, len, "1.21.111", 8)) found111 = true;
-        if (memmem(base, len, "1.21.110", 8)) found110 = true;
+    struct Fp { uintptr_t off; uint8_t b[8]; };
+    static const Fp fps[] = {
+        {0x5103870, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}},
+        {0x5114BB8, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}},
+        {0xE1DC87C, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}},
+        {0x66578D8, {0xff,0xc3,0x01,0xd1,0xfd,0x7b,0x03,0xa9}},
+        {0x945D230, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}},
+        {0x93D2760, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}},
+    };
+    int match = 0;
+    for (const Fp &f : fps) {
+        uint8_t buf[8] = {0};
+        uintptr_t addr = getAbsoluteAddress(MineLib, f.off);
+        if (KittyMemory::memRead(buf, reinterpret_cast<const void *>(addr), 8) == KittyMemory::SUCCESS &&
+            memcmp(buf, f.b, 8) == 0)
+            match++;
     }
-    fclose(maps);
-    if (found111) return true;
-    if (found110) {
-        __android_log_print(ANDROID_LOG_ERROR, "Vanth", "libminecraftpe.so es 1.21.110: los offsets son de 1.21.111, no se hookea");
-        return false;
-    }
-    return true; // no aparece ninguna version: se deja pasar
+    __android_log_print(ANDROID_LOG_INFO, "Vanth", "huella de version: %d/6", match);
+    return match >= 5;
 }
 
 pthread_t cheatThread;
