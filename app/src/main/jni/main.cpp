@@ -1297,6 +1297,34 @@ void BaseActorRenderer_renderText(void *a1, void *a2, void *a3, void *a4, void *
 
 
 
+#include <android/log.h>
+
+// Guarda de version: los offsets de offsets.h son de Minecraft 1.21.111. Si el libminecraftpe.so
+// cargado trae 1.21.110 (u otra) y no 1.21.111, no se hookea nada y el juego abre normal
+// en vez de cerrarse por un offset que apunta a otro lado.
+static bool MineVersionOk() {
+    FILE *maps = fopen("/proc/self/maps", "r");
+    if (!maps) return true; // no se puede comprobar: se deja pasar
+    bool found111 = false, found110 = false;
+    char line[1024];
+    while (fgets(line, sizeof(line), maps)) {
+        if (!strstr(line, "libminecraftpe.so")) continue;
+        unsigned long start = 0, end = 0; char perms[8] = {0};
+        if (sscanf(line, "%lx-%lx %7s", &start, &end, perms) != 3 || perms[0] != 'r') continue;
+        const void *base = reinterpret_cast<const void *>(start);
+        size_t len = end - start;
+        if (memmem(base, len, "1.21.111", 8)) found111 = true;
+        if (memmem(base, len, "1.21.110", 8)) found110 = true;
+    }
+    fclose(maps);
+    if (found111) return true;
+    if (found110) {
+        __android_log_print(ANDROID_LOG_ERROR, "Vanth", "libminecraftpe.so es 1.21.110: los offsets son de 1.21.111, no se hookea");
+        return false;
+    }
+    return true; // no aparece ninguna version: se deja pasar
+}
+
 pthread_t cheatThread;
 bool isHackLoaded = false;
 void *hack_thread(void *) {
@@ -1306,6 +1334,8 @@ void *hack_thread(void *) {
         mineMap = KittyMemory::getLibraryMap(MineLib);
 		handle = dlopen(OBFUSCATE("libminecraftpe.so"), RTLD_LAZY);
     } while (!mineMap.isValid());
+
+	if (!MineVersionOk()) return NULL;
 	
 	RenderHook();
 	
