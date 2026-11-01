@@ -65,6 +65,7 @@ bool swing = true;
 bool rotations = true;
 bool hurtCheck = true;
 int auraType = 1;
+int auraRotMode = 0;
 bool antiBot = true;
 float hitBoxValue = 0.6;
 std::vector<std::string> friendList;
@@ -353,6 +354,7 @@ void saveConfig(std::string path) {
 	cfg["hotkeyBack"] = hotkeyBack;
 	cfg["antiInvis"] = antiInvis;
 	cfg["auraType"] = auraType;
+	cfg["auraRotMode"] = auraRotMode;
 	cfg["deathPosition"] = deathPosition;
 	cfg["targetLock"] = targetLock;
 	cfg["rotations"] = rotations;
@@ -559,6 +561,7 @@ void loadConfig(std::string path){
 	hotkeyBack = cfg.value("hotkeyBack", hotkeyBack);
 	antiInvis = cfg.value("antiInvis", antiInvis);
 	auraType = cfg.value("auraType", auraType);
+	auraRotMode = cfg.value("auraRotMode", auraRotMode);
 	deathPosition = cfg.value("deathPosition", deathPosition);
 	targetLock = cfg.value("targetLock", targetLock);
 	rotations = cfg.value("rotations", rotations);

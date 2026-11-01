@@ -516,6 +516,7 @@ void BeginDraw() {
 			            ImGui::SameLine();
 						if (!emulateNativeAttack) {
 							ImGui::Checkbox(OBFUSCATE("Rotations"), &rotations);
+							if (rotations || targetLock) { ImGui::PushItemWidth(calcResX * 200); ImGui::Combo(OBFUSCATE("Rotation Mode"), &auraRotMode, AuraRots::Names, IM_ARRAYSIZE(AuraRots::Names)); ImGui::PopItemWidth(); }
 				            ImGui::Checkbox(OBFUSCATE("Target Lock"), &targetLock);
 							ImGui::SameLine();
 						}
@@ -553,6 +554,7 @@ void BeginDraw() {
 			                    ImGui::Checkbox(OBFUSCATE("Swing"), &swing);
 			                    ImGui::SameLine();
 			                    ImGui::Checkbox(OBFUSCATE("Rotations"), &rotations);
+							if (rotations || targetLock) { ImGui::PushItemWidth(calcResX * 200); ImGui::Combo(OBFUSCATE("Rotation Mode"), &auraRotMode, AuraRots::Names, IM_ARRAYSIZE(AuraRots::Names)); ImGui::PopItemWidth(); }
 				                ImGui::Checkbox(OBFUSCATE("Target Lock"), &targetLock);
 						        ImGui::SameLine();
 						        ImGui::Checkbox(OBFUSCATE("Hurt Check"), &hurtCheck);

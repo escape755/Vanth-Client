@@ -104,6 +104,7 @@ NoCaveVignette
 #include "Vector.h"
 #include "hook_classes.h"
 #include "variables.h"
+#include "aura_rots.h"
 #include "hook_utils.h"
 #include "menu_utils.h"
 
@@ -775,7 +776,7 @@ void *NormalTick(LocalPlayer *thiz) {
 				vec3_t* objPos = playerList[0]->getPosition();
 				if (rotations || targetLock) {
                     vec3_t calcObjPos = *objPos;
-                    auraAngle = globalPlayerPos.CalcPlayerAngle(calcObjPos);
+                    auraAngle = AuraRots::compute(auraRotMode, globalPlayerPos, calcObjPos, playerList[0], localPlayer, hitBox ? hitBoxValue : 0.6f, 1.8f, localPlayer ? *localPlayer->getRotation() : vec2_t());
 				}
 				if (hackDistanceTo(playerPos, objPos) <= killRange) {
 					bool canHurt = true;
@@ -811,7 +812,7 @@ void *NormalTick(LocalPlayer *thiz) {
 					if (rotations || targetLock) {
                         vec3_t* objPos = nearestTarget->getPosition();
                         vec3_t calcObjPos = *objPos;
-                        auraAngle = globalPlayerPos.CalcPlayerAngle(calcObjPos);
+                        auraAngle = AuraRots::compute(auraRotMode, globalPlayerPos, calcObjPos, nearestTarget, localPlayer, hitBox ? hitBoxValue : 0.6f, 1.8f, localPlayer ? *localPlayer->getRotation() : vec2_t());
 					}
 					if (nearestKillTarget != NULL) {
 						bool canHurt = true;
@@ -847,7 +848,7 @@ void *NormalTick(LocalPlayer *thiz) {
 					if (rotations || targetLock) {
                         vec3_t* objPos = nearestTarget->getPosition();
                         vec3_t calcObjPos = *objPos;
-                        auraAngle = globalPlayerPos.CalcPlayerAngle(calcObjPos);
+                        auraAngle = AuraRots::compute(auraRotMode, globalPlayerPos, calcObjPos, nearestTarget, localPlayer, hitBox ? hitBoxValue : 0.6f, 1.8f, localPlayer ? *localPlayer->getRotation() : vec2_t());
 					}
 				    if (nearestKillTarget != NULL) {
 						for (Player *actors : playerList) {
@@ -1299,16 +1300,19 @@ void BaseActorRenderer_renderText(void *a1, void *a2, void *a3, void *a4, void *
 
 #include <android/log.h>
 
-// Guarda de version por huella (el .so real de 1.21.111.1 solo menciona "1.21.110").
+// Guarda de version por huella: las strings de version NO sirven (el libminecraftpe.so real de
+// 1.21.111.1 solo menciona "1.21.110"). En cambio se comparan los primeros 8 bytes de 6 funciones
+// de Offsets64 con los de ese build. Si no coinciden (otra version), no se hookea nada y el juego
+// abre normal en vez de cerrarse con offsets que apuntan a otro lado.
 static bool MineVersionOk() {
     struct Fp { uintptr_t off; uint8_t b[8]; };
     static const Fp fps[] = {
-        {0x5103870, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}},
-        {0x5114BB8, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}},
-        {0xE1DC87C, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}},
-        {0x66578D8, {0xff,0xc3,0x01,0xd1,0xfd,0x7b,0x03,0xa9}},
-        {0x945D230, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}},
-        {0x93D2760, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}},
+        {0x5103870, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}}, // NoHurtCam
+        {0x5114BB8, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}}, // NoBoatRotation
+        {0xE1DC87C, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}}, // PlaceCamera
+        {0x66578D8, {0xff,0xc3,0x01,0xd1,0xfd,0x7b,0x03,0xa9}}, // WaterTrigger1
+        {0x945D230, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}}, // NoSlowDown
+        {0x93D2760, {0xff,0xc3,0x00,0xd1,0xfd,0x7b,0x01,0xa9}}, // Noclip
     };
     int match = 0;
     for (const Fp &f : fps) {
