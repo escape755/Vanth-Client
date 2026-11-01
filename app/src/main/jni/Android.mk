@@ -29,6 +29,8 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)
 LOCAL_STATIC_LIBRARIES := libdobby
 
 LOCAL_SRC_FILES := main.cpp \
+	vanth_compat.cpp \
+	vanth_compat.cpp \
 	ImGui/imgui.cpp \
     ImGui/imgui_draw.cpp \
     ImGui/imgui_widgets.cpp \
