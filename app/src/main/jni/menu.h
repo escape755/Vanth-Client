@@ -331,6 +331,8 @@ void BeginDraw() {
 	     }
 	  } else  {
      #if defined(__aarch64__)
+     Blood::frame("Vanth | APK (x64 Bit) | Minecraft v1.21.111");
+     Blood::draw();
      if (ImGui::Begin(OBFUSCATE("Vanth | APK (x64 Bit) | Minecraft v1.21.111"), NULL, ImGuiWindowFlags_NoResize)) {
      #elif defined(__ARM_ARCH_7A__)
      if (ImGui::Begin(OBFUSCATE("Vanth | APK (x32 Bit) | Minecraft v1.21.111"), NULL, ImGuiWindowFlags_NoResize)) {
@@ -342,72 +344,71 @@ void BeginDraw() {
 		ImGui::SetWindowSize(ImVec2(screenWidth / 2.5, screenHeight / 1.5));
 		
 		float pointSize = calculateResolutionScale(screenWidth, screenHeight, 2480, 1116);
-		BackGroundDots(250, 2 * pointSize, 5 * pointSize, 100 * pointSize);
 		ImGuiStyle& style = ImGui::GetStyle();
         ImVec4 originalButtonColor = style.Colors[ImGuiCol_Button];
         ImVec4 originalButtonHoveredColor = style.Colors[ImGuiCol_ButtonHovered];
         ImVec4 originalButtonActiveColor = style.Colors[ImGuiCol_ButtonActive];
 	
 		style.Colors[ImGuiCol_Button] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
-        style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.70f, 0.00f, 1.00f, 0.50f);
-        style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.70f, 0.00f, 1.00f, 0.35f);
+        style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.85f, 0.04f, 0.06f, 0.50f);
+        style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.85f, 0.04f, 0.06f, 0.35f);
         style.FrameBorderSize = 0.0f;
 		
 		ImGui::BeginChild(OBFUSCATE("SidePanel"), ImVec2(calcResX * 150, 0), false);
 		style.Colors[ImGuiCol_Button] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
         style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 		if (pageId == 0) {
-			style.Colors[ImGuiCol_Button] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
+			style.Colors[ImGuiCol_Button] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
+			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
 		}
 		if (ImGui::Button(OBFUSCATE("Movement"))) pageId = 0;
 		style.Colors[ImGuiCol_Button] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
         style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 		if (pageId == 1) {
-			style.Colors[ImGuiCol_Button] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
+			style.Colors[ImGuiCol_Button] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
+			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
 		}
 		if (ImGui::Button(OBFUSCATE("Combat"))) pageId = 1;
 		style.Colors[ImGuiCol_Button] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
         style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 		if (pageId == 2) {
-			style.Colors[ImGuiCol_Button] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
+			style.Colors[ImGuiCol_Button] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
+			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
 		}
 		if (ImGui::Button(OBFUSCATE("Building"))) pageId = 2;
 		style.Colors[ImGuiCol_Button] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
         style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 		if (pageId == 3) {
-			style.Colors[ImGuiCol_Button] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
+			style.Colors[ImGuiCol_Button] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
+			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
 		}
 		if (ImGui::Button(OBFUSCATE("List"))) pageId = 3;
 		style.Colors[ImGuiCol_Button] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
         style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 		if (pageId == 4) {
-			style.Colors[ImGuiCol_Button] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
+			style.Colors[ImGuiCol_Button] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
+			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
 		}
 		if (ImGui::Button(OBFUSCATE("Visuals"))) pageId = 4;
 		style.Colors[ImGuiCol_Button] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
         style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 		if (pageId == 5) {
-			style.Colors[ImGuiCol_Button] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
+			style.Colors[ImGuiCol_Button] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
+			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
 		}
 		if (ImGui::Button(OBFUSCATE("Hotkeys"))) pageId = 5;
 		style.Colors[ImGuiCol_Button] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
         style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 		if (pageId == 6) {
-			style.Colors[ImGuiCol_Button] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
+			style.Colors[ImGuiCol_Button] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
+			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
 		}
 		if (ImGui::Button(OBFUSCATE("Other"))) pageId = 6;
 		style.Colors[ImGuiCol_Button] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
         style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 		if (pageId == 7) {
-			style.Colors[ImGuiCol_Button] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
+			style.Colors[ImGuiCol_Button] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
+			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
 		}
 		if (ImGui::Button(OBFUSCATE("Info"))) pageId = 7;
 		ImGui::EndChild();
@@ -1133,13 +1134,13 @@ void BeginDraw() {
                             loadConfig(loadPath);
                         }
 						onFunctionSound = true;
-		                AddNotification(oxorany("Config Loaded"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		                AddNotification(oxorany("Config Loaded"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 				    }
 				    ImGui::SameLine();
 				    if (ImGui::Button(OBFUSCATE("Save"))) {
 					    saveConfig(loadPath);
 						onFunctionSound = true;
-		                AddNotification(oxorany("Config Saved"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		                AddNotification(oxorany("Config Saved"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 				    }
 					ImGui::EndTabItem();
                 }
