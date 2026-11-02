@@ -1,82 +1,80 @@
-void embraceTheDarkness()
-{
-  ImVec4* colors = ImGui::GetStyle().Colors;
-  colors[ImGuiCol_Text]                   = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
-  colors[ImGuiCol_TextDisabled]           = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
-  colors[ImGuiCol_WindowBg]               = ImVec4(0.00f, 0.00f, 0.00f, 0.75f);
-  colors[ImGuiCol_ChildBg]                = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-  colors[ImGuiCol_PopupBg]                = ImVec4(0.19f, 0.19f, 0.19f, 0.92f);
-  colors[ImGuiCol_Border]                 = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-  colors[ImGuiCol_BorderShadow]           = ImVec4(0.00f, 0.00f, 0.00f, 0.24f);
-  colors[ImGuiCol_FrameBg]                = ImVec4(0.05f, 0.05f, 0.05f, 0.54f);
-  colors[ImGuiCol_FrameBgHovered]         = ImVec4(0.19f, 0.19f, 0.19f, 0.54f);
-  colors[ImGuiCol_FrameBgActive]          = ImVec4(0.20f, 0.22f, 0.23f, 1.00f);
-  colors[ImGuiCol_TitleBg]                = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
-  colors[ImGuiCol_TitleBgActive]          = ImVec4(0.00f, 0.00f, 0.00f, 0.75f);
-  colors[ImGuiCol_TitleBgCollapsed]       = ImVec4(0.00f, 0.00f, 0.00f, 0.25f);
-  colors[ImGuiCol_MenuBarBg]              = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
-  colors[ImGuiCol_ScrollbarBg]            = ImVec4(0.05f, 0.05f, 0.05f, 0.54f);
-  colors[ImGuiCol_ScrollbarGrab]          = ImVec4(0.70f, 0.00f, 1.00f, 0.50f);
-  colors[ImGuiCol_ScrollbarGrabHovered]   = ImVec4(0.70f, 0.00f, 1.00f, 0.50f);
-  colors[ImGuiCol_ScrollbarGrabActive]    = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-  colors[ImGuiCol_CheckMark]              = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-  colors[ImGuiCol_SliderGrab]             = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-  colors[ImGuiCol_SliderGrabActive]       = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-  colors[ImGuiCol_Button]                 = ImVec4(0.05f, 0.05f, 0.05f, 0.54f);
-  colors[ImGuiCol_ButtonHovered]          = ImVec4(0.19f, 0.19f, 0.19f, 0.54f);
-  colors[ImGuiCol_ButtonActive]           = ImVec4(0.20f, 0.22f, 0.23f, 1.00f);
-  colors[ImGuiCol_Header]                 = ImVec4(0.00f, 0.00f, 0.00f, 0.52f);
-  colors[ImGuiCol_HeaderHovered]          = ImVec4(0.00f, 0.00f, 0.00f, 0.36f);
-  colors[ImGuiCol_HeaderActive]           = ImVec4(0.20f, 0.22f, 0.23f, 0.33f);
-  colors[ImGuiCol_Separator]              = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-  colors[ImGuiCol_SeparatorHovered]       = ImVec4(0.70f, 0.00f, 1.00f, 0.35f);
-  colors[ImGuiCol_SeparatorActive]        = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-  colors[ImGuiCol_ResizeGrip]             = ImVec4(0.70f, 0.00f, 1.00f, 0.50f);
-  colors[ImGuiCol_ResizeGripHovered]      = ImVec4(0.70f, 0.00f, 1.00f, 0.50f);
-  colors[ImGuiCol_ResizeGripActive]       = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-  colors[ImGuiCol_Tab]                    = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-  colors[ImGuiCol_TabHovered]             = ImVec4(0.70f, 0.00f, 1.00f, 0.50f);
-  colors[ImGuiCol_TabActive]              = ImVec4(0.70f, 0.00f, 1.00f, 1.00f);
-  colors[ImGuiCol_TabUnfocused]           = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-  colors[ImGuiCol_TabUnfocusedActive]     = ImVec4(0.70f, 0.00f, 1.00f, 0.00f);
-  colors[ImGuiCol_PlotLines]              = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
-  colors[ImGuiCol_PlotLinesHovered]       = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
-  colors[ImGuiCol_PlotHistogram]          = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
-  colors[ImGuiCol_PlotHistogramHovered]   = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
-  colors[ImGuiCol_TableHeaderBg]          = ImVec4(0.00f, 0.00f, 0.00f, 0.52f);
-  colors[ImGuiCol_TableBorderStrong]      = ImVec4(0.00f, 0.00f, 0.00f, 0.52f);
-  colors[ImGuiCol_TableBorderLight]       = ImVec4(0.28f, 0.28f, 0.28f, 0.29f);
-  colors[ImGuiCol_TableRowBg]             = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-  colors[ImGuiCol_TableRowBgAlt]          = ImVec4(1.00f, 1.00f, 1.00f, 0.06f);
-  colors[ImGuiCol_TextSelectedBg]         = ImVec4(0.20f, 0.22f, 0.23f, 1.00f);
-  colors[ImGuiCol_DragDropTarget]         = ImVec4(0.33f, 0.67f, 0.86f, 1.00f);
-  colors[ImGuiCol_NavHighlight]           = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
-  colors[ImGuiCol_NavWindowingHighlight]  = ImVec4(1.00f, 0.00f, 0.00f, 0.70f);
-  colors[ImGuiCol_NavWindowingDimBg]      = ImVec4(1.00f, 0.00f, 0.00f, 0.20f);
-  colors[ImGuiCol_ModalWindowDimBg]       = ImVec4(1.00f, 0.00f, 0.00f, 0.35f);
+#pragma once
+// Tema "Vanth Sangre": rojo oscuro, bordes de sangre, acentos brillantes y botones con relieve.
+// Se aplica una vez con embraceTheDarkness(). Colores en ImVec4(r, g, b, a) de 0 a 1.
+static inline void embraceTheDarkness() {
+    ImGuiStyle &st = ImGui::GetStyle();
+    ImVec4 *c = st.Colors;
 
-  ImGuiStyle& style = ImGui::GetStyle();
-  style.WindowPadding                     = ImVec2(8.00f, 8.00f);
-  style.FramePadding                      = ImVec2(5.00f, 2.00f);
-  style.CellPadding                       = ImVec2(6.00f, 6.00f);
-  style.ItemSpacing                       = ImVec2(6.00f, 6.00f);
-  style.ItemInnerSpacing                  = ImVec2(6.00f, 6.00f);
-  style.TouchExtraPadding                 = ImVec2(0.00f, 0.00f);
-  style.IndentSpacing                     = 25;
-  style.ScrollbarSize                     = 10;
-  style.GrabMinSize                       = 10;
-  style.WindowBorderSize                  = 2;
-  style.ChildBorderSize                   = 2;
-  style.PopupBorderSize                   = 2;
-  style.FrameBorderSize                   = 2;
-  style.TabBorderSize                     = 2;
-  style.TabBarBorderSize                     = 0;
-  style.ChildRounding                     = 4;
-  style.FrameRounding                     = 3;
-  style.PopupRounding                     = 7;
-  style.WindowRounding                    = 7;
-  style.ScrollbarRounding                 = 9;
-  style.GrabRounding                      = 3;
-  style.LogSliderDeadzone                 = 6;
-  style.TabRounding                       = 4;
+    const ImVec4 bgDeep   (0.06f, 0.01f, 0.02f, 0.94f);  // fondo de la ventana
+    const ImVec4 bgPanel  (0.10f, 0.02f, 0.03f, 0.90f);  // paneles / hijos
+    const ImVec4 bgFrame  (0.16f, 0.03f, 0.04f, 0.95f);  // campos
+    const ImVec4 blood   (0.78f, 0.05f, 0.07f, 1.00f);   // rojo sangre principal
+    const ImVec4 bloodHi (0.95f, 0.14f, 0.12f, 1.00f);   // rojo brillante (hover / activo)
+    const ImVec4 bloodDk (0.40f, 0.02f, 0.03f, 1.00f);   // rojo oscuro (bordes internos)
+    const ImVec4 bone    (0.92f, 0.87f, 0.84f, 1.00f);   // texto hueso
+    const ImVec4 muted   (0.62f, 0.45f, 0.45f, 1.00f);   // texto secundario
+
+    c[ImGuiCol_Text]                 = bone;
+    c[ImGuiCol_TextDisabled]         = muted;
+    c[ImGuiCol_WindowBg]             = bgDeep;
+    c[ImGuiCol_ChildBg]              = bgPanel;
+    c[ImGuiCol_PopupBg]              = bgPanel;
+    c[ImGuiCol_Border]               = blood;
+    c[ImGuiCol_BorderShadow]         = ImVec4(0, 0, 0, 0);
+    c[ImGuiCol_FrameBg]              = bgFrame;
+    c[ImGuiCol_FrameBgHovered]       = ImVec4(0.26f, 0.05f, 0.06f, 1.00f);
+    c[ImGuiCol_FrameBgActive]        = ImVec4(0.34f, 0.07f, 0.08f, 1.00f);
+    c[ImGuiCol_TitleBg]              = ImVec4(0.12f, 0.01f, 0.02f, 1.00f);
+    c[ImGuiCol_TitleBgActive]        = ImVec4(0.30f, 0.03f, 0.04f, 1.00f);
+    c[ImGuiCol_TitleBgCollapsed]     = ImVec4(0.12f, 0.01f, 0.02f, 0.75f);
+    c[ImGuiCol_MenuBarBg]            = bgPanel;
+    c[ImGuiCol_ScrollbarBg]          = ImVec4(0.06f, 0.01f, 0.02f, 0.60f);
+    c[ImGuiCol_ScrollbarGrab]        = bloodDk;
+    c[ImGuiCol_ScrollbarGrabHovered] = blood;
+    c[ImGuiCol_ScrollbarGrabActive]  = bloodHi;
+    c[ImGuiCol_CheckMark]            = bloodHi;
+    c[ImGuiCol_SliderGrab]           = blood;
+    c[ImGuiCol_SliderGrabActive]     = bloodHi;
+    c[ImGuiCol_Button]               = ImVec4(0.30f, 0.04f, 0.05f, 1.00f);
+    c[ImGuiCol_ButtonHovered]        = blood;
+    c[ImGuiCol_ButtonActive]         = bloodHi;
+    c[ImGuiCol_Header]               = ImVec4(0.40f, 0.05f, 0.06f, 0.80f);
+    c[ImGuiCol_HeaderHovered]        = blood;
+    c[ImGuiCol_HeaderActive]         = bloodHi;
+    c[ImGuiCol_Separator]            = bloodDk;
+    c[ImGuiCol_SeparatorHovered]     = blood;
+    c[ImGuiCol_SeparatorActive]      = bloodHi;
+    c[ImGuiCol_ResizeGrip]           = bloodDk;
+    c[ImGuiCol_ResizeGripHovered]    = blood;
+    c[ImGuiCol_ResizeGripActive]     = bloodHi;
+    c[ImGuiCol_Tab]                  = ImVec4(0.22f, 0.03f, 0.04f, 1.00f);
+    c[ImGuiCol_TabHovered]           = blood;
+    c[ImGuiCol_TabActive]            = ImVec4(0.55f, 0.06f, 0.07f, 1.00f);
+    c[ImGuiCol_PlotLines]            = bloodHi;
+    c[ImGuiCol_PlotHistogram]        = blood;
+    c[ImGuiCol_TextSelectedBg]       = ImVec4(0.70f, 0.05f, 0.07f, 0.35f);
+    c[ImGuiCol_NavHighlight]         = bloodHi;
+    c[ImGuiCol_NavWindowingHighlight]= ImVec4(1.00f, 0.00f, 0.00f, 0.70f);
+    c[ImGuiCol_NavWindowingDimBg]    = ImVec4(0.20f, 0.00f, 0.00f, 0.20f);
+    c[ImGuiCol_ModalWindowDimBg]     = ImVec4(0.10f, 0.00f, 0.00f, 0.55f);
+
+    // Forma: esquinas redondeadas, bordes finos, espaciado comodo
+    st.WindowRounding    = 10.0f;
+    st.ChildRounding     = 8.0f;
+    st.FrameRounding     = 6.0f;
+    st.PopupRounding     = 8.0f;
+    st.ScrollbarRounding = 8.0f;
+    st.GrabRounding      = 6.0f;
+    st.TabRounding       = 6.0f;
+    st.WindowBorderSize  = 2.0f;
+    st.ChildBorderSize   = 1.0f;
+    st.FrameBorderSize   = 1.0f;
+    st.PopupBorderSize   = 1.5f;
+    st.TabBorderSize     = 1.0f;
+    st.FramePadding      = ImVec2(8, 5);
+    st.ItemSpacing       = ImVec2(8, 6);
+    st.ItemInnerSpacing  = ImVec2(6, 4);
+    st.WindowPadding     = ImVec2(12, 10);
+    st.ScrollbarSize     = 12.0f;
+    st.GrabMinSize       = 10.0f;
 }
