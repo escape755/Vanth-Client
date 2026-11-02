@@ -103,6 +103,8 @@ NoCaveVignette
 #include "dark_theme.h"
 #include "Vector.h"
 #include "hook_classes.h"
+#include "testfly.h"
+#include "popdetect.h"
 #include "variables.h"
 #include "aura_rots.h"
 #include "hook_utils.h"
@@ -466,6 +468,8 @@ void *NormalTick(LocalPlayer *thiz) {
 	vec3_t *playerPos = thiz->getPosition();
 	globalPlayerRot = *playerRot;
 	globalPlayerPos = *playerPos;
+	if (TestFly::enabled && !isLANGame) TestFly::apply(playerPos); else TestFly::reset();
+	if (PopDetect::enabled) PopDetect::update(thiz->getHealth()); else PopDetect::reset();
 	Level *myLevel = thiz->getLevel();
 	GameMode *myGameMode = thiz->getGameMode();
 	BlockSource *myBlockSource = thiz->getDimensionBlockSource();
@@ -876,6 +880,7 @@ void *NormalTick(LocalPlayer *thiz) {
 void *(*old_PlayerAuthInputPacket)(void *a1, void *a2);
 void *PlayerAuthInputPacket(void *a1, void *a2) {
 	if (panic) return old_PlayerAuthInputPacket(a1, a2);
+	TestFly::captureInput(a1);
 	if (!inMenu) {
 		if (!isLANGame) {
 		if (derp) {
