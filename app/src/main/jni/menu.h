@@ -460,7 +460,7 @@ void BeginDraw() {
 				        ImGui::Checkbox(OBFUSCATE("Creative Fly"), &creativeFly);
 				        if (ImGui::Button(OBFUSCATE("Dump Player (diag)"))) Diag::dumpRequested = true;
 				        if (!Diag::lines.empty()) {
-					        ImGui::BeginChild("##diagout", ImVec2(0, 160), true);
+					        ImGui::BeginChild("##diagout", ImVec2(0, 320), true);
 					        for (const std::string &ln : Diag::lines) ImGui::TextUnformatted(ln.c_str());
 					        ImGui::EndChild();
 				        }
