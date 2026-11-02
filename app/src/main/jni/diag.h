@@ -55,7 +55,7 @@ static inline void dumpPlayer(void *player) {
     std::vector<unsigned long long> curL2; // valores en orden, para comparar con la referencia
     for (size_t i = 0; i < vals.size(); i++) {
         unsigned long long p = vals[i];
-        if ((p >> 40) != 0xB4ULL || p == NOREAD) continue;
+        if ((p >> 56) != 0xB4ULL || p == NOREAD) continue;
         char hb[96];
         snprintf(hb, sizeof(hb), "[%04x] -> %016llx", (unsigned) (i * 8), p);
         lines.push_back(hb);
