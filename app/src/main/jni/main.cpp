@@ -106,6 +106,7 @@ NoCaveVignette
 #include "testfly.h"
 #include "popdetect.h"
 #include "diag.h"
+#include "blood.h"
 #include "variables.h"
 #include "aura_rots.h"
 #include "hook_utils.h"
