@@ -459,6 +459,11 @@ void BeginDraw() {
 				        ImGui::Checkbox(OBFUSCATE("Noclip"), &noclip);
 				        ImGui::Checkbox(OBFUSCATE("Creative Fly"), &creativeFly);
 				        if (ImGui::Button(OBFUSCATE("Dump Player (diag)"))) Diag::dumpRequested = true;
+				        if (!Diag::lines.empty()) {
+					        ImGui::BeginChild("##diagout", ImVec2(0, 160), true);
+					        for (const std::string &ln : Diag::lines) ImGui::TextUnformatted(ln.c_str());
+					        ImGui::EndChild();
+				        }
 				        ImGui::Checkbox(OBFUSCATE("Pop Detector"), &PopDetect::enabled);
 				        if (PopDetect::enabled) { ImGui::SameLine(); ImGui::Text("Pops: %d", PopDetect::pops); ImGui::SliderInt(OBFUSCATE("Drop"), &PopDetect::dropThreshold, 2, 20); ImGui::SliderInt(OBFUSCATE("Low HP"), &PopDetect::lowHealth, 1, 10); }
 				        ImGui::Checkbox(OBFUSCATE("TestFly"), &TestFly::enabled);
