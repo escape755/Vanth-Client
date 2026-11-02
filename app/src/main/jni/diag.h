@@ -1,6 +1,7 @@
 #pragma once
-// DIAGNOSTICO solo lectura: vuelca 8-bytes del objeto LocalPlayer y los muestra en el menu.
-// Marca con "*" las lineas que cambian respecto al volcado anterior (para comparar tótem en mano vs offhand).
+// DIAGNOSTICO solo lectura. Modo "solo cambios":
+//  1a pulsacion: guarda la referencia (baseline) y muestra "referencia guardada".
+//  siguientes:   muestra SOLO las lineas cuyo valor cambio respecto a la referencia anterior.
 #include <cstdio>
 #include <string>
 #include <vector>
@@ -12,6 +13,7 @@ static bool dumpRequested = false;
 static int dumpSpan = 0x800;
 static std::vector<std::string> lines;
 static std::vector<unsigned long long> prevVals;
+static const unsigned long long NOREAD = 0xDEADDEADDEADDEADULL;
 
 static inline void dumpPlayer(void *player) {
     lines.clear();
@@ -19,22 +21,30 @@ static inline void dumpPlayer(void *player) {
     std::vector<unsigned long long> vals;
     vals.reserve(dumpSpan / 8);
     for (int off = 0; off < dumpSpan; off += 8) {
-        unsigned long long v = 0;
-        if (KittyMemory::memRead(&v, (char *) player + off, 8) != KittyMemory::SUCCESS) v = 0xDEADDEADDEADDEADULL;
+        unsigned long long v = NOREAD;
+        if (KittyMemory::memRead(&v, (char *) player + off, 8) != KittyMemory::SUCCESS) v = NOREAD;
         vals.push_back(v);
     }
     char buf[96];
-    snprintf(buf, sizeof(buf), "player %p  (* = cambio vs anterior)", player);
+    if (prevVals.size() != vals.size()) {
+        lines.push_back("Referencia guardada. Pulsa otra vez tras cambiar el tótem.");
+        prevVals = vals;
+        return;
+    }
+    snprintf(buf, sizeof(buf), "Cambios vs referencia (objeto %p):", player);
     lines.push_back(buf);
+    int n = 0;
     for (size_t i = 0; i < vals.size(); i++) {
-        bool changed = prevVals.size() == vals.size() && prevVals[i] != vals[i];
-        if (vals[i] == 0xDEADDEADDEADDEADULL)
-            snprintf(buf, sizeof(buf), "%04x: <no legible>%s", (unsigned) (i * 8), changed ? " *" : "");
+        if (prevVals[i] == vals[i]) continue;
+        n++;
+        if (vals[i] == NOREAD)
+            snprintf(buf, sizeof(buf), "%04x: <no legible>", (unsigned) (i * 8));
         else
-            snprintf(buf, sizeof(buf), "%04x: %016llx%s", (unsigned) (i * 8), vals[i], changed ? " *" : "");
+            snprintf(buf, sizeof(buf), "%04x: %016llx  (antes %016llx)", (unsigned) (i * 8), vals[i], prevVals[i]);
         lines.push_back(buf);
     }
-    prevVals = vals;
+    if (n == 0) lines.push_back("(ningun cambio)");
+    prevVals = vals; // la siguiente pulsacion compara contra esta
 }
 
 } // namespace Diag
