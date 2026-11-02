@@ -461,7 +461,7 @@ void BeginDraw() {
 				        ImGui::Checkbox(OBFUSCATE("Creative Fly"), &creativeFly);
 				        if (ImGui::Button(OBFUSCATE("Dump Player (diag)"))) Diag::dumpRequested = true;
 				        if (!Diag::lines.empty()) {
-					        if (ImGui::Button("Copiar diag")) {
+					        if (ImGui::Button("Copiar diag (tambien guarda archivo)")) {
 						        std::string all;
 						        for (const std::string &ln : Diag::lines) { all += ln; all += "\n"; }
 						        ImGui::SetClipboardText(all.c_str());

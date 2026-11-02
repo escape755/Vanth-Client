@@ -3,6 +3,9 @@
 //  1a pulsacion: guarda la referencia (baseline) y muestra "referencia guardada".
 //  siguientes:   muestra SOLO las lineas cuyo valor cambio respecto a la referencia anterior.
 #include <cstdio>
+
+// Carpeta donde el juego ya guarda sus archivos (escribible sin permisos especiales).
+static const char *DiagFilePath = "/sdcard/Android/data/com.mojang.minecraftpe/files/vanth_diag.txt";
 #include <string>
 #include <vector>
 #include "KittyMemory/KittyMemory.h"
@@ -45,6 +48,13 @@ static inline void dumpPlayer(void *player) {
     }
     if (n == 0) lines.push_back("(ningun cambio)");
     prevVals = vals; // la siguiente pulsacion compara contra esta
+
+    // Guardar tambien en archivo (el portapapeles no funciona en esta build de ImGui en Android)
+    FILE *f = fopen(DiagFilePath, "w");
+    if (f) {
+        for (const std::string &ln : lines) { fputs(ln.c_str(), f); fputc('\n', f); }
+        fclose(f);
+    }
 }
 
 } // namespace Diag
