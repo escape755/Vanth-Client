@@ -16,6 +16,7 @@ static bool dumpRequested = false;
 static int dumpSpan = 0x800;
 static std::vector<std::string> lines;
 static std::vector<unsigned long long> prevVals;
+static std::vector<unsigned long long> prevL2;
 static const unsigned long long NOREAD = 0xDEADDEADDEADDEADULL;
 
 static inline void dumpPlayer(void *player) {
@@ -29,11 +30,9 @@ static inline void dumpPlayer(void *player) {
         vals.push_back(v);
     }
     char buf[96];
-    if (prevVals.size() != vals.size()) {
-        lines.push_back("Referencia guardada. Pulsa otra vez tras cambiar el tótem.");
-        prevVals = vals;
-        return;
-    }
+    bool firstPress = prevVals.size() != vals.size();
+    if (firstPress) lines.push_back("Referencia guardada. Pulsa otra vez tras cambiar el tótem.");
+    if (!firstPress) {
     snprintf(buf, sizeof(buf), "Cambios vs referencia (objeto %p):", player);
     lines.push_back(buf);
     int n = 0;
@@ -47,7 +46,33 @@ static inline void dumpPlayer(void *player) {
         lines.push_back(buf);
     }
     if (n == 0) lines.push_back("(ningun cambio)");
+    }
     prevVals = vals; // la siguiente pulsacion compara contra esta
+
+    // NIVEL 2: por cada puntero tipo heap (b4...) dentro del jugador, volcar 0x100 bytes del objeto.
+    // Asi una sola pulsacion cubre el inventario aunque este detras de un puntero.
+    lines.push_back("--- nivel 2 (punteros b4...) ---  (* = cambio vs referencia)");
+    std::vector<unsigned long long> curL2; // valores en orden, para comparar con la referencia
+    for (size_t i = 0; i < vals.size(); i++) {
+        unsigned long long p = vals[i];
+        if ((p >> 40) != 0xB4ULL || p == NOREAD) continue;
+        char hb[96];
+        snprintf(hb, sizeof(hb), "[%04x] -> %016llx", (unsigned) (i * 8), p);
+        lines.push_back(hb);
+        for (int off = 0; off < 0x100; off += 8) {
+            unsigned long long v = NOREAD;
+            if (KittyMemory::memRead(&v, (void *) (p + off), 8) != KittyMemory::SUCCESS) v = NOREAD;
+            curL2.push_back(v);
+            size_t k = curL2.size() - 1;
+            bool chg = !firstPress && k < prevL2.size() && prevL2[k] != v;
+            char lb[120];
+            if (v == NOREAD) snprintf(lb, sizeof(lb), "   +%03x: <no legible>%s", off, chg ? " *" : "");
+            else snprintf(lb, sizeof(lb), "   +%03x: %016llx%s", off, v, chg ? " *" : "");
+            lines.push_back(lb);
+        }
+    }
+
+    prevL2 = curL2;
 
     // Guardar tambien en archivo (el portapapeles no funciona en esta build de ImGui en Android)
     FILE *f = fopen(DiagFilePath, "w");
