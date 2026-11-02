@@ -458,6 +458,8 @@ void BeginDraw() {
 				        ImGui::SameLine();
 				        ImGui::Checkbox(OBFUSCATE("Noclip"), &noclip);
 				        ImGui::Checkbox(OBFUSCATE("Creative Fly"), &creativeFly);
+				        ImGui::Checkbox(OBFUSCATE("Pop Detector"), &PopDetect::enabled);
+				        if (PopDetect::enabled) { ImGui::SameLine(); ImGui::Text("Pops: %d", PopDetect::pops); ImGui::SliderInt(OBFUSCATE("Drop"), &PopDetect::dropThreshold, 2, 20); ImGui::SliderInt(OBFUSCATE("Low HP"), &PopDetect::lowHealth, 1, 10); }
 				        ImGui::Checkbox(OBFUSCATE("TestFly"), &TestFly::enabled);
 				        if (TestFly::enabled) {
 					        ImGui::SliderFloat(OBFUSCATE("H Speed BPS"), &TestFly::hSpeedBps, 1.0f, 100.0f, "%.1f");
