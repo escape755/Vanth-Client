@@ -3,6 +3,7 @@
 //  1a pulsacion: guarda la referencia (baseline) y muestra "referencia guardada".
 //  siguientes:   muestra SOLO las lineas cuyo valor cambio respecto a la referencia anterior.
 #include <cstdio>
+#include <cstring>
 
 // Carpeta donde el juego ya guarda sus archivos (escribible sin permisos especiales).
 static const char *DiagFilePath = "/sdcard/Android/data/com.mojang.minecraftpe/files/vanth_diag.txt";
@@ -39,6 +40,21 @@ static std::vector<std::string> lines;
 static std::vector<unsigned long long> prevVals;
 static std::vector<unsigned long long> prevL2;
 static const unsigned long long NOREAD = 0xDEADDEADDEADDEADULL;
+
+
+// Busca un texto dentro de un bloque de memoria leido con SafeRead (sin crash). Devuelve el offset o -1.
+static inline long FindTextAt(const void *base, const char *needle, size_t span) {
+    size_t nl = strlen(needle);
+    const size_t CH = 0x100;
+    unsigned char buf[CH];
+    for (size_t off = 0; off < span; off += CH - nl) {
+        if (!SafeRead((const char *) base + off, buf, CH)) continue;
+        for (size_t i = 0; i + nl <= CH; i++) {
+            if (memcmp(buf + i, needle, nl) == 0) return (long) (off + i);
+        }
+    }
+    return -1;
+}
 
 static inline void dumpPlayer(void *player) {
     lines.clear();
@@ -116,6 +132,26 @@ static inline void dumpPlayer(void *player) {
         } else {
             lines.push_back("--- sonda: player+0x2F0 no legible ---");
         }
+    }
+
+    // BUSQUEDA DE TEXTO: "totem_of_undying" en el jugador y en cada objeto apuntado (nivel 2).
+    // No depende de movimiento: el nombre del item es texto fijo.
+    {
+        const char *needle = "totem_of_undying";
+        lines.push_back("--- busqueda de texto: totem_of_undying ---");
+        long o = FindTextAt(player, needle, 0x800);
+        if (o >= 0) { char tb[120]; snprintf(tb, sizeof(tb), "TOTEM en jugador+0x%lx", o); lines.push_back(tb); }
+        for (size_t i = 0; i < vals.size(); i++) {
+            unsigned long long p = vals[i];
+            if ((p >> 56) != 0xB4ULL || p == NOREAD) continue;
+            long q = FindTextAt((const void *) (uintptr_t) (p & 0x00FFFFFFFFFFFFFFULL), needle, 0x400);
+            if (q >= 0) {
+                char tb[160];
+                snprintf(tb, sizeof(tb), "TOTEM en jugador+0x%03x -> objeto+0x%lx", (unsigned) (i * 8), q);
+                lines.push_back(tb);
+            }
+        }
+        lines.push_back("--- fin busqueda ---");
     }
 
     // Guardar tambien en archivo (el portapapeles no funciona en esta build de ImGui en Android)
