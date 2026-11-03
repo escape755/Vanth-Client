@@ -151,6 +151,25 @@ static inline void dumpPlayer(void *player) {
                 lines.push_back(tb);
             }
         }
+        // NIVEL 3: punteros b4 dentro de los objetos del nivel 2 (limitado para no trabar el juego)
+        int budget = 400; // maximo de punteros a seguir en nivel 3
+        for (size_t i = 0; i < vals.size() && budget > 0; i++) {
+            unsigned long long p = vals[i];
+            if ((p >> 56) != 0xB4ULL || p == NOREAD) continue;
+            const unsigned long long pu = p & 0x00FFFFFFFFFFFFFFULL;
+            for (int off = 0; off < 0x100 && budget > 0; off += 8) {
+                unsigned long long q = NOREAD;
+                if (!SafeRead((const char *) (uintptr_t) pu + off, &q, 8)) continue;
+                if ((q >> 56) != 0xB4ULL || q == NOREAD) continue;
+                budget--;
+                long r = FindTextAt((const void *) (uintptr_t) (q & 0x00FFFFFFFFFFFFFFULL), needle, 0x200);
+                if (r >= 0) {
+                    char tb[200];
+                    snprintf(tb, sizeof(tb), "TOTEM en jugador+0x%03x -> +0x%03x -> objeto+0x%lx", (unsigned) (i * 8), off, r);
+                    lines.push_back(tb);
+                }
+            }
+        }
         lines.push_back("--- fin busqueda ---");
     }
 
