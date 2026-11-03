@@ -1,3 +1,4 @@
+#include "Images/demon_bg.h"
 #include "Images/YT.h"
 #include "Images/Telegram.h"
 #include "Images/Discord.h"
@@ -331,9 +332,27 @@ void BeginDraw() {
 	     }
 	  } else  {
      #if defined(__aarch64__)
-     Blood::frame("Vanth | APK (x64 Bit) | Minecraft v1.21.111");
-     Blood::draw();
      if (ImGui::Begin(OBFUSCATE("Vanth | APK (x64 Bit) | Minecraft v1.21.111"), NULL, ImGuiWindowFlags_NoResize)) {
+			static GLuint demonBg = 0;
+			if (!demonBg) demonBg = CreateTextureFromMemoryPNG(DemonBgPNG, sizeof(DemonBgPNG));
+			if (demonBg) {
+				ImDrawList *bgdl = ImGui::GetWindowDrawList();
+				ImVec2 p0 = ImGui::GetWindowPos(), p1 = ImVec2(p0.x + ImGui::GetWindowSize().x, p0.y + ImGui::GetWindowSize().y);
+				bgdl->AddImageRounded((ImTextureID)(intptr_t)demonBg, p0, p1, ImVec2(0, 0), ImVec2(1, 1), IM_COL32(255, 255, 255, 150), 10.0f);
+				bgdl->AddRectFilled(p0, p1, IM_COL32(8, 0, 2, 120), 10.0f);
+			}
+         // Fondo de imagen (demonio) dentro de la ventana, con velo oscuro para que se lea el texto.
+         {
+             static GLuint bgTex = 0;
+             if (!bgTex) bgTex = CreateTextureFromMemoryPNG(BackgroundImage, sizeof(BackgroundImage));
+             if (bgTex) {
+                 ImDrawList *bdl = ImGui::GetWindowDrawList();
+                 ImVec2 wp = ImGui::GetWindowPos(), ws = ImGui::GetWindowSize();
+                 bdl->AddImageRounded((ImTextureID)(intptr_t)bgTex, wp, ImVec2(wp.x + ws.x, wp.y + ws.y),
+                                      ImVec2(0, 0), ImVec2(1, 1), IM_COL32(255, 255, 255, 255), 10.0f);
+                 bdl->AddRectFilled(wp, ImVec2(wp.x + ws.x, wp.y + ws.y), IM_COL32(0, 0, 0, 150), 10.0f);
+             }
+         }
      #elif defined(__ARM_ARCH_7A__)
      if (ImGui::Begin(OBFUSCATE("Vanth | APK (x32 Bit) | Minecraft v1.21.111"), NULL, ImGuiWindowFlags_NoResize)) {
      #else
