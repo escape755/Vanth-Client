@@ -16,7 +16,9 @@ static inline bool SafeRead(const void *addr, void *out, size_t len) {
     static int memFd = -1;
     if (memFd < 0) memFd = open("/proc/self/mem", O_RDONLY);
     if (memFd < 0) return false;
-    ssize_t n = pread(memFd, out, len, (off_t) (uintptr_t) addr);
+    // Quitar el byte alto: los punteros tipo b4... llevan un tag de hardware que pread no acepta.
+    uintptr_t a = (uintptr_t) addr & 0x00FFFFFFFFFFFFFFULL;
+    ssize_t n = pread(memFd, out, len, (off_t) a);
     return n == (ssize_t) len;
 }
 
