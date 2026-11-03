@@ -8,7 +8,18 @@
 static const char *DiagFilePath = "/sdcard/Android/data/com.mojang.minecraftpe/files/vanth_diag.txt";
 #include <string>
 #include <vector>
-#include "KittyMemory/KittyMemory.h"
+#include <fcntl.h>
+#include <unistd.h>
+
+// Lectura que NO crashea: si la direccion no es valida, pread devuelve error en vez de SIGSEGV.
+static inline bool SafeRead(const void *addr, void *out, size_t len) {
+    static int memFd = -1;
+    if (memFd < 0) memFd = open("/proc/self/mem", O_RDONLY);
+    if (memFd < 0) return false;
+    ssize_t n = pread(memFd, out, len, (off_t) (uintptr_t) addr);
+    return n == (ssize_t) len;
+}
+
 
 namespace Diag {
 
@@ -26,7 +37,7 @@ static inline void dumpPlayer(void *player) {
     vals.reserve(dumpSpan / 8);
     for (int off = 0; off < dumpSpan; off += 8) {
         unsigned long long v = NOREAD;
-        if (KittyMemory::memRead(&v, (char *) player + off, 8) != KittyMemory::SUCCESS) v = NOREAD;
+        if (!SafeRead((char *) player + off, &v, 8)) v = NOREAD;
         vals.push_back(v);
     }
     char buf[96];
@@ -61,7 +72,7 @@ static inline void dumpPlayer(void *player) {
         lines.push_back(hb);
         for (int off = 0; off < 0x100; off += 8) {
             unsigned long long v = NOREAD;
-            if (KittyMemory::memRead(&v, (void *) (p + off), 8) != KittyMemory::SUCCESS) v = NOREAD;
+            if (!SafeRead((void *) (p + off), &v, 8)) v = NOREAD;
             curL2.push_back(v);
             size_t k = curL2.size() - 1;
             bool chg = !firstPress && k < prevL2.size() && prevL2[k] != v;
