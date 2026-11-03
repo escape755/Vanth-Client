@@ -85,6 +85,29 @@ static inline void dumpPlayer(void *player) {
 
     prevL2 = curL2;
 
+    // SONDA (solo lectura): candidato del offhand segun getOffhandSlot -> this+0x2F0 (752).
+    // Se lee el puntero y 0x40 bytes de lo que apunta, para comparar con tótem en mano principal vs offhand.
+    {
+        unsigned long long cand = NOREAD;
+        if (SafeRead((char *) player + 0x2F0, &cand, 8)) {
+            char pb[120];
+            snprintf(pb, sizeof(pb), "--- sonda: player+0x2F0 = %016llx ---", cand);
+            lines.push_back(pb);
+            if (cand != 0) {
+                for (int off = 0; off < 0x40; off += 8) {
+                    unsigned long long v = NOREAD;
+                    if (!SafeRead((void *) (cand + off), &v, 8)) v = NOREAD;
+                    char sb[96];
+                    if (v == NOREAD) snprintf(sb, sizeof(sb), "   sonda+%02x: <no legible>", off);
+                    else snprintf(sb, sizeof(sb), "   sonda+%02x: %016llx", off, v);
+                    lines.push_back(sb);
+                }
+            }
+        } else {
+            lines.push_back("--- sonda: player+0x2F0 no legible ---");
+        }
+    }
+
     // Guardar tambien en archivo (el portapapeles no funciona en esta build de ImGui en Android)
     FILE *f = fopen(DiagFilePath, "w");
     if (f) {
