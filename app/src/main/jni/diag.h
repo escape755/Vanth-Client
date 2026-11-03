@@ -13,13 +13,21 @@ static const char *DiagFilePath = "/sdcard/Android/data/com.mojang.minecraftpe/f
 
 // Lectura que NO crashea: si la direccion no es valida, pread devuelve error en vez de SIGSEGV.
 static inline bool SafeRead(const void *addr, void *out, size_t len) {
-    static int memFd = -1;
-    if (memFd < 0) memFd = open("/proc/self/mem", O_RDONLY);
-    if (memFd < 0) return false;
-    // Quitar el byte alto: los punteros tipo b4... llevan un tag de hardware que pread no acepta.
+    // write() desde memoria invalida devuelve EFAULT en vez de crashear. Leemos el resultado por un pipe.
+    // (/proc/self/mem suele estar bloqueado en Android para apps, por eso no se usa.)
+    static int pfd[2] = {-1, -1};
+    if (pfd[0] < 0) {
+        if (pipe(pfd) != 0) return false;
+    }
     uintptr_t a = (uintptr_t) addr & 0x00FFFFFFFFFFFFFFULL;
-    ssize_t n = pread(memFd, out, len, (off_t) a);
-    return n == (ssize_t) len;
+    ssize_t w = write(pfd[1], (const void *) a, len);
+    if (w != (ssize_t) len) {
+        // vaciar lo que haya quedado en el pipe si fue parcial
+        if (w > 0) { char tmp[64]; ssize_t r = read(pfd[0], tmp, (size_t) w); (void) r; }
+        return false;
+    }
+    ssize_t r = read(pfd[0], out, len);
+    return r == (ssize_t) len;
 }
 
 
