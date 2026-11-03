@@ -106,7 +106,7 @@ NoCaveVignette
 #include "testfly.h"
 #include "popdetect.h"
 #include "diag.h"
-#include "blood.h"
+#include "bgimage.h"
 #include "variables.h"
 #include "aura_rots.h"
 #include "hook_utils.h"
@@ -472,7 +472,7 @@ void *NormalTick(LocalPlayer *thiz) {
 	globalPlayerPos = *playerPos;
 	if (TestFly::enabled && !isLANGame) TestFly::apply(playerPos); else TestFly::reset();
 	if (PopDetect::enabled) PopDetect::update(thiz->getHealth()); else PopDetect::reset();
-	if (Diag::dumpRequested) { Diag::dumpRequested = false; Diag::dumpPlayer(thiz); }
+	if (Diag::dumpRequested) { Diag::dumpRequested = false; Diag::dumpPlayer(thiz, getAbsoluteAddress(MineLib, 0xC9486C8)); }
 	Level *myLevel = thiz->getLevel();
 	GameMode *myGameMode = thiz->getGameMode();
 	BlockSource *myBlockSource = thiz->getDimensionBlockSource();

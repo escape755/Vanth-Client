@@ -56,7 +56,7 @@ static inline long FindTextAt(const void *base, const char *needle, size_t span)
     return -1;
 }
 
-static inline void dumpPlayer(void *player) {
+static inline void dumpPlayer(void *player, uintptr_t offhandFnAddr) {
     lines.clear();
     if (!player) { lines.push_back("player = NULL"); return; }
     std::vector<unsigned long long> vals;
@@ -171,6 +171,29 @@ static inline void dumpPlayer(void *player) {
             }
         }
         lines.push_back("--- fin busqueda ---");
+    }
+
+    // PRUEBA DIRECTA: llamar Actor::getOffhandSlot (offset de la tabla de simbolos).
+    // Antes se verifica el prologo (stp x29,x30 = a9bf7bfd) para no llamar una direccion equivocada.
+    {
+        lines.push_back("--- llamada getOffhandSlot (tabla) ---");
+        unsigned int pro = 0;
+        if (offhandFnAddr && SafeRead((const void *) offhandFnAddr, &pro, 4) && pro == 0xA9BF7BFDu) {
+            typedef void *(*GetOffhandFn)(void *);
+            GetOffhandFn fn = (GetOffhandFn) offhandFnAddr;
+            void *slot = fn(player);
+            char lb[160];
+            snprintf(lb, sizeof(lb), "getOffhandSlot(jugador) = %p", slot);
+            lines.push_back(lb);
+            if (slot) {
+                long t = FindTextAt(slot, "totem_of_undying", 0x200);
+                snprintf(lb, sizeof(lb), "TOTEM en el slot devuelto: %s (+0x%lx)", t >= 0 ? "SI" : "no", t >= 0 ? t : 0L);
+                lines.push_back(lb);
+            }
+        } else {
+            lines.push_back("prologo no coincide: no se llamo (offset distinto en esta build)");
+        }
+        lines.push_back("--- fin llamada ---");
     }
 
     // Guardar tambien en archivo (el portapapeles no funciona en esta build de ImGui en Android)
