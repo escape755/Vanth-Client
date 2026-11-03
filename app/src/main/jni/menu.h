@@ -1,4 +1,9 @@
 #include "Images/demon_bg.h"
+
+// ---- Apariencia (controlada desde el menu, pestaña Other) ----
+static bool  bgImageOn = true;     // mostrar la imagen de fondo
+static float bgImageOpacity = 0.60f; // 0..1
+
 #include "Images/YT.h"
 #include "Images/Telegram.h"
 #include "Images/Discord.h"
@@ -335,10 +340,10 @@ void BeginDraw() {
      if (ImGui::Begin(OBFUSCATE("Vanth | APK (x64 Bit) | Minecraft v1.21.111"), NULL, ImGuiWindowFlags_NoResize)) {
 			static GLuint demonBg = 0;
 			if (!demonBg) demonBg = CreateTextureFromMemoryPNG(DemonBgPNG, sizeof(DemonBgPNG));
-			if (demonBg) {
+			if (demonBg && bgImageOn) {
 				ImDrawList *bgdl = ImGui::GetWindowDrawList();
 				ImVec2 p0 = ImGui::GetWindowPos(), p1 = ImVec2(p0.x + ImGui::GetWindowSize().x, p0.y + ImGui::GetWindowSize().y);
-				bgdl->AddImageRounded((ImTextureID)(intptr_t)demonBg, p0, p1, ImVec2(0, 0), ImVec2(1, 1), IM_COL32(255, 255, 255, 150), 10.0f);
+				bgdl->AddImageRounded((ImTextureID)(intptr_t)demonBg, p0, p1, ImVec2(0, 0), ImVec2(1, 1), IM_COL32(255, 255, 255, (int)(bgImageOpacity * 255)), 10.0f);
 				bgdl->AddRectFilled(p0, p1, IM_COL32(8, 0, 2, 120), 10.0f);
 			}
          // Fondo de imagen (demonio) dentro de la ventana, con velo oscuro para que se lea el texto.
@@ -429,6 +434,13 @@ void BeginDraw() {
 			style.Colors[ImGuiCol_Button] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
 			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
 		}
+		if (pageId == 8) {
+			style.Colors[ImGuiCol_Button] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
+			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.85f, 0.04f, 0.06f, 1.00f);
+		}
+		if (ImGui::Button(OBFUSCATE("GUI"))) pageId = 8;
+		style.Colors[ImGuiCol_Button] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+        style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 		if (ImGui::Button(OBFUSCATE("Info"))) pageId = 7;
 		ImGui::EndChild();
 		
@@ -1166,6 +1178,12 @@ void BeginDraw() {
 				ImGui::EndTabBar();
                 }
 				break;
+            case 8:
+                ImGui::Text(OBFUSCATE("Apariencia"));
+                ImGui::Separator();
+                ImGui::Checkbox(OBFUSCATE("Imagen de fondo"), &bgImageOn);
+                ImGui::SliderFloat(OBFUSCATE("Opacidad de la imagen"), &bgImageOpacity, 0.0f, 1.0f, "%.2f");
+                break;
             case 7:
 				//ImGui::Text(inMemoryFunction.c_str());
 				//ImGui::DragInt(OBFUSCATE("ActorId"), &nearActorId, 0.05f, 1, 50);
