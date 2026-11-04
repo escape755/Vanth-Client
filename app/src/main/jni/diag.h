@@ -189,6 +189,31 @@ static inline void dumpPlayer(void *player, uintptr_t offhandFnAddr) {
                 long t = FindTextAt(slot, "totem_of_undying", 0x200);
                 snprintf(lb, sizeof(lb), "TOTEM en el slot devuelto: %s (+0x%lx)", t >= 0 ? "SI" : "no", t >= 0 ? t : 0L);
                 lines.push_back(lb);
+                // Volcar el objeto del slot y seguir sus punteros 2 niveles buscando el nombre
+                unsigned long long sw[16];
+                for (int k = 0; k < 16; k++) {
+                    sw[k] = NOREAD;
+                    SafeRead((const char *) slot + k * 8, &sw[k], 8);
+                    char sb[96];
+                    snprintf(sb, sizeof(sb), "  slot+%02x: %016llx", k * 8, sw[k]);
+                    lines.push_back(sb);
+                }
+                int hits = 0;
+                for (int k = 0; k < 16; k++) {
+                    unsigned long long p = sw[k];
+                    if ((p >> 56) != 0xB4ULL || p == NOREAD) continue;
+                    long r = FindTextAt((const void *) (uintptr_t) (p & 0x00FFFFFFFFFFFFFFULL), "totem_of_undying", 0x200);
+                    if (r >= 0) { char hb[160]; snprintf(hb, sizeof(hb), "  NOMBRE en slot+%02x -> +0x%lx", k * 8, r); lines.push_back(hb); hits++; }
+                    // segundo nivel
+                    for (int j = 0; j < 16 && hits < 8; j++) {
+                        unsigned long long q = NOREAD;
+                        if (!SafeRead((const char *) (uintptr_t) (p & 0x00FFFFFFFFFFFFFFULL) + j * 8, &q, 8)) continue;
+                        if ((q >> 56) != 0xB4ULL || q == NOREAD) continue;
+                        long r2 = FindTextAt((const void *) (uintptr_t) (q & 0x00FFFFFFFFFFFFFFULL), "totem_of_undying", 0x200);
+                        if (r2 >= 0) { char hb[200]; snprintf(hb, sizeof(hb), "  NOMBRE en slot+%02x -> +%02x -> +0x%lx", k * 8, j * 8, r2); lines.push_back(hb); hits++; }
+                    }
+                }
+                if (hits == 0) lines.push_back("  sin nombre en 2 niveles desde el slot");
             }
         } else {
             lines.push_back("prologo no coincide: no se llamo (offset distinto en esta build)");
