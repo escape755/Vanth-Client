@@ -436,13 +436,19 @@ void *Intersects(Mob *thiz, vec3_t *a2, vec3_t *a3) {
 		}
 		
 		if (fireballRotation || itemRotation || !mobList.empty() || !playerList.empty()) {
+            // Angulo validado: pitch en [-90, 90], yaw en [-180, 180), sin NaN.
+            float ay = std::isfinite(auraAngle.y) ? auraAngle.y : 0.0f;
+            float ax = std::isfinite(auraAngle.x) ? auraAngle.x : 0.0f;
+            ay = std::fmod(ay + 540.0f, 360.0f) - 180.0f;
+            ax = ax < -90.0f ? -90.0f : (ax > 90.0f ? 90.0f : ax);
 			if (rotations) {
-                if (!isLANGame && !emulateNativeAttack) thiz->setYBodyRotation(auraAngle.y);
-			    thiz->setYHeadRot(auraAngle.y);
-                thiz->setRotationX(auraAngle.x);
+                // Cuerpo y cabeza con el MISMO yaw para que no se separen.
+                if (!isLANGame && !emulateNativeAttack) thiz->setYBodyRotation(ay);
+			    thiz->setYHeadRot(ay);
+                thiz->setRotationX(ax);
             }
             if (targetLock) {
-                thiz->setRotationY(auraAngle.y);
+                thiz->setRotationY(ay);
             }
 		}
     }
