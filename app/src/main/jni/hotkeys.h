@@ -4,10 +4,10 @@ void HotkeyNotification (int currentHotkey) {
 		if (!isLANGame) {
 		    if (alwaysSprinting) {
 				onFunctionSound = true;
-		        AddNotification(oxorany("Always Sprinting ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		        AddNotification(oxorany("Always Sprinting ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	        } else {
 				offFunctionSound = true;
-		        AddNotification(oxorany("Always Sprinting OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		        AddNotification(oxorany("Always Sprinting OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	        }
 		} else {
 			errorFunctionSound = true;
@@ -19,10 +19,10 @@ void HotkeyNotification (int currentHotkey) {
 		if (!isLANGame) {
 		    if (noSlowDown) {
 				onFunctionSound = true;
-		        AddNotification(oxorany("No SlowDown ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		        AddNotification(oxorany("No SlowDown ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	        } else {
 				offFunctionSound = true;
-		        AddNotification(oxorany("No SlowDown OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		        AddNotification(oxorany("No SlowDown OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	        }
 		} else {
 			errorFunctionSound = true;
@@ -34,10 +34,10 @@ void HotkeyNotification (int currentHotkey) {
 		if (!isLANGame) {
 		    if (fastFall) {
 				onFunctionSound = true;
-		        AddNotification(oxorany("Fast Fall ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		        AddNotification(oxorany("Fast Fall ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	        } else {
 				offFunctionSound = true;
-		        AddNotification(oxorany("Fast Fall OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		        AddNotification(oxorany("Fast Fall OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	        }
 		} else {
 			errorFunctionSound = true;
@@ -49,10 +49,10 @@ void HotkeyNotification (int currentHotkey) {
 		if (!isLANGame) {
 		    if (offDrown) {
 				onFunctionSound = true;
-		        AddNotification(oxorany("OFF Drowning ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		        AddNotification(oxorany("OFF Drowning ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	        } else {
 				offFunctionSound = true;
-		        AddNotification(oxorany("OFF Drowning OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		        AddNotification(oxorany("OFF Drowning OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	        }
 		} else {
 			errorFunctionSound = true;
@@ -64,10 +64,10 @@ void HotkeyNotification (int currentHotkey) {
 		if (!isLANGame) {
 		    if (step) {
 				onFunctionSound = true;
-		        AddNotification(oxorany("Step ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		        AddNotification(oxorany("Step ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	        } else {
 				offFunctionSound = true;
-		        AddNotification(oxorany("Step OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		        AddNotification(oxorany("Step OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	        }
 		} else {
 			errorFunctionSound = true;
@@ -79,10 +79,10 @@ void HotkeyNotification (int currentHotkey) {
 		if (!isLANGame) {
 		    if (ladderFly) {
 				onFunctionSound = true;
-		        AddNotification(oxorany("Ladder Fly ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		        AddNotification(oxorany("Ladder Fly ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	        } else {
 				offFunctionSound = true;
-		        AddNotification(oxorany("Ladder Fly OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		        AddNotification(oxorany("Ladder Fly OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	        }
 		} else {
 			errorFunctionSound = true;
@@ -94,10 +94,10 @@ void HotkeyNotification (int currentHotkey) {
 		if (!isLANGame) {
 		    if (noclip) {
 				onFunctionSound = true;
-		        AddNotification(oxorany("Noclip ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		        AddNotification(oxorany("Noclip ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	        } else {
 				offFunctionSound = true;
-		        AddNotification(oxorany("Noclip OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		        AddNotification(oxorany("Noclip OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	        }
 		} else {
 			errorFunctionSound = true;
@@ -109,10 +109,10 @@ void HotkeyNotification (int currentHotkey) {
 		if (!isLANGame) {
 		    if (offWaterTrigger) {
 				onFunctionSound = true;
-		        AddNotification(oxorany("No Water ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		        AddNotification(oxorany("No Water ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	        } else {
 				offFunctionSound = true;
-		        AddNotification(oxorany("No Water OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		        AddNotification(oxorany("No Water OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	        }
 		} else {
 			errorFunctionSound = true;
@@ -124,10 +124,10 @@ void HotkeyNotification (int currentHotkey) {
 		if (!isLANGame) {
 		    if (offSlowdownTrigger) {
 				onFunctionSound = true;
-		        AddNotification(oxorany("No Web ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		        AddNotification(oxorany("No Web ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	        } else {
 				offFunctionSound = true;
-		        AddNotification(oxorany("No Web OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		        AddNotification(oxorany("No Web OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	        }
 		} else {
 			errorFunctionSound = true;
@@ -139,10 +139,10 @@ void HotkeyNotification (int currentHotkey) {
 		if (!isLANGame) {
 		    if (forceCreativeFly) {
 				onFunctionSound = true;
-		        AddNotification(oxorany("Force Creative Fly ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		        AddNotification(oxorany("Force Creative Fly ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	        } else {
 				offFunctionSound = true;
-		        AddNotification(oxorany("Force Creative Fly OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		        AddNotification(oxorany("Force Creative Fly OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	        }
 		} else {
 			errorFunctionSound = true;
@@ -153,150 +153,150 @@ void HotkeyNotification (int currentHotkey) {
 		case 12:
 		if (killAura) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("KillAura ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("KillAura ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("KillAura OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("KillAura OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 13:
 		if (hitBox) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("HitBox ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("HitBox ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("HitBox OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("HitBox OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 14:
 		if (swing) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("Swing ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("Swing ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("Swing OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("Swing OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 15:
 		if (rotations) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("Rotations ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("Rotations ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("Rotations OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("Rotations OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 16:
 		if (targetLock) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("Target Lock ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("Target Lock ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("Target Lock OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("Target Lock OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 17:
 		if (mobAura) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("MobAura ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("MobAura ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("MobAura OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("MobAura OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 18:
 		if (killItems) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("Kill Near Items ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("Kill Near Items ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("Kill Near Items OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("Kill Near Items OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 19:
 		if (antiFireball) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("Anti Fireball ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("Anti Fireball ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("Anti Fireball OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("Anti Fireball OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 20:
 		if (fastBridge) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("Auto Click Build ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("Auto Click Build ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("Auto Click Build OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("Auto Click Build OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 21:
 		if (enableFov) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("Enable Fov ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("Enable Fov ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("Enable Fov OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("Enable Fov OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 22:
 		if (placeCam) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("Place Camera ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("Place Camera ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("Place Camera OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("Place Camera OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 23:
 		if (xrayCam) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("Xray Camera ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("Xray Camera ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("Xray Camera OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("Xray Camera OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 24:
 		if (xrayCaves) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("Xray Caves ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("Xray Caves ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("Xray Caves OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("Xray Caves OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 25:
 		if (look360) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("Freelook ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("Freelook ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("Freelook OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("Freelook OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 26:
 		if (damageFly) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("Damage Fly ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("Damage Fly ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("Damage Fly OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("Damage Fly OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
@@ -304,10 +304,10 @@ void HotkeyNotification (int currentHotkey) {
 		if (!isLANGame) {
 		    if (strafe) {
 				onFunctionSound = true;
-		        AddNotification(oxorany("Strafe ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		        AddNotification(oxorany("Strafe ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	        } else {
 				offFunctionSound = true;
-		        AddNotification(oxorany("Strafe OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		        AddNotification(oxorany("Strafe OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	        }
 		} else {
 			errorFunctionSound = true;
@@ -318,20 +318,20 @@ void HotkeyNotification (int currentHotkey) {
 		case 28:
 		if (autoClicker) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("Auto Clicker ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("Auto Clicker ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("Auto Clicker OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("Auto Clicker OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 		
 		case 29:
 		if (xrayDefault) {
 			onFunctionSound = true;
-		    AddNotification(oxorany("Xray ON"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.75f));
+		    AddNotification(oxorany("Xray ON"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.75f));
 	    } else {
 			offFunctionSound = true;
-		    AddNotification(oxorany("Xray OFF"), 6.0f, ImVec4(0.70f, 0.00f, 1.00f, 0.25f));
+		    AddNotification(oxorany("Xray OFF"), 6.0f, ImVec4(0.85f, 0.04f, 0.06f, 0.25f));
 	    }
 		break;
 	}

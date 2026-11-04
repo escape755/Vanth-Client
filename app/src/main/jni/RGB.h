@@ -1,6 +1,6 @@
 int rgb = 1;
 bool rF = true, gF, bF = true, rF_, gF_, bF_;
-float redd = 255, greenn = 0, bluee = 255;
+float redd = 220, greenn = 12, bluee = 14; // rojo sangre por defecto (antes magenta)
 void performRGBChange() {
 switch (rgb) {
  case 0: {
