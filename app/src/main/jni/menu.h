@@ -490,6 +490,8 @@ void BeginDraw() {
 					        ImGui::EndChild();
 				        }
 				        ImGui::Checkbox(OBFUSCATE("Pop Detector"), &PopDetect::enabled);
+				        ImGui::SliderInt(OBFUSCATE("Tótem a vida"), &PopDetect::totemAt, 0, 20);
+				        if (PopDetect::needTotem && !PopDetect::offhandHasTotem) ImGui::TextColored(ImVec4(1, 0.2f, 0.2f, 1), "%s", OBFUSCATE("Falta tótem en offhand"));
 				        if (PopDetect::enabled) { ImGui::SameLine(); ImGui::Text("Pops: %d", PopDetect::pops); ImGui::SliderInt(OBFUSCATE("Drop"), &PopDetect::dropThreshold, 2, 20); ImGui::SliderInt(OBFUSCATE("Low HP"), &PopDetect::lowHealth, 1, 10); }
 				        ImGui::Checkbox(OBFUSCATE("TestFly"), &TestFly::enabled);
 				        if (TestFly::enabled) {
@@ -521,7 +523,7 @@ void BeginDraw() {
 				if (ImGui::BeginTabBar(OBFUSCATE("Tab1"))) {
 					if (ImGui::BeginTabItem(OBFUSCATE("Players"))) {
 						ImGui::PushID(21);
-				        ImGui::Checkbox(OBFUSCATE("KillAura"), &killAura);
+				        ImGui::Checkbox(OBFUSCATE("Demon Aura+"), &killAura);
 				        if (killAura) {
                             ImGui::PushItemWidth(calcResX * 200);
                             if (ImGui::DragFloat(OBFUSCATE("Kill Range"), &killRange, 0.015f, 1.0f, 10.0f, "%.1f")) {

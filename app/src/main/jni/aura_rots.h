@@ -9,11 +9,11 @@
 
 namespace AuraRots {
 
-enum Mode { Default = 0, Snap, Closest, Quintuplet, Smooth, FrontsX, Astral };
-static const char *Names[] = {"Default", "Snap", "Closest", "Quintuplet", "Smooth", "FrontsX", "Astral"};
+enum Mode { Default = 0, Snap, Closest, Quintuplet, Smooth, FrontsX, Astral, Predictor, Halcon };
+static const char *Names[] = {"Default", "Snap", "Closest", "Quintuplet", "Smooth", "FrontsX", "Astral", "Predictor", "Halcon"};
 
 static float eyeHeight = 1.62f; // ajustable si el aim queda alto o bajo
-static float lockDeg = 4.0f;    // con menos error que esto se clava exacto
+static float lockDeg = 6.0f;    // con menos error que esto se clava exacto
 static float turbo = 1.0f;      // multiplica la ganancia de Smooth/FrontsX/Astral
 
 static const float R2D = 57.29577951f;
@@ -47,10 +47,14 @@ static void velocity(const void *key, float x, float y, float z, float &vx, floa
         return;
     }
     Track &t = it->second;
-    if (now - t.t >= 30) {
+    if (now - t.t >= 10) {
         float dt = (float) (now - t.t) / 50.0f; // en ticks de 50 ms
         if (dt > 4.0f) { t.vx = t.vy = t.vz = 0; }
-        else { t.vx = (x - t.px) / dt; t.vy = (y - t.py) / dt; t.vz = (z - t.pz) / dt; }
+        else {
+            // promedio suave (EMA): usa varias muestras, no solo la ultima
+            float nvx = (x - t.px) / dt, nvy = (y - t.py) / dt, nvz = (z - t.pz) / dt;
+            t.vx = t.vx * 0.5f + nvx * 0.5f; t.vy = t.vy * 0.5f + nvy * 0.5f; t.vz = t.vz * 0.5f + nvz * 0.5f;
+        }
         t.px = x; t.py = y; t.pz = z; t.t = now;
     }
     vx = t.vx; vy = t.vy; vz = t.vz;
@@ -75,10 +79,26 @@ static void chase(float wp, float wy, float gain) {
     sPitch = clampf(sPitch + g * dp, -90, 90);
 }
 
+// Punto del hitbox con el menor giro desde la mira actual (cur = pitch/yaw actuales).
+static void pickAimPoint(float cx, float cy, float cz, float hw, float height,
+                         const vec3_t &eye, const vec2_t &cur, float &wp, float &wy) {
+    float bestErr = 1e9f; wp = 0; wy = 0;
+    for (int iy = 0; iy < 3; iy++) {
+        float py = cy + height * (0.2f + 0.3f * iy); // pies, pecho, cabeza
+        for (int ix = -1; ix <= 1; ix++) {
+            float px = cx + ix * hw * 0.8f;
+            float p, y;
+            angleTo(px - eye.x, py - eye.y, cz - eye.z, p, y);
+            float err = std::fabs(wrap180(y - cur.y)) + std::fabs(p - cur.x);
+            if (err < bestErr) { bestErr = err; wp = p; wy = y; }
+        }
+    }
+}
+
 // eye: tus ojos. tpos: posicion del objetivo (a nivel de ojos). target/self: punteros para rastrear velocidad.
 static vec2_t compute(int mode, const vec3_t &eye, const vec3_t &tpos, const void *target, const void *self,
                       float width, float height, const vec2_t &cur) {
-    if (mode <= Default || mode > Astral) return eye.CalcPlayerAngle(tpos);
+    if (mode <= Default || mode > Halcon) return eye.CalcPlayerAngle(tpos);
 
     if (mode != sMode || target != sTarget) { sMode = mode; sTarget = target; sPitch = cur.x; sYaw = cur.y; }
 
@@ -88,49 +108,73 @@ static vec2_t compute(int mode, const vec3_t &eye, const vec3_t &tpos, const voi
 
     float fx = tpos.x, fy = tpos.y - eyeHeight, fz = tpos.z; // pies del objetivo
     float dist = std::sqrt((eye.x - fx) * (eye.x - fx) + (eye.y - fy) * (eye.y - fy) + (eye.z - fz) * (eye.z - fz));
+    float hw = clampf(width * 0.5f, 0.05f, 5.0f);
     float wp = 0, wy = 0;
+    // Velocidad relativa del objetivo respecto a ti (lo que importa para apuntar)
+    float rvx = tvx - evx, rvy = tvy - evy, rvz = tvz - evz;
 
     switch (mode) {
-        case Snap:
+        case Snap: {
+            // Apunta al centro del pecho, sin giro intermedio.
             angleTo(fx - eye.x, fy + height * 0.6f - eye.y, fz - eye.z, wp, wy);
             sPitch = wp; sYaw = wy;
             break;
-        case Closest:
-        case Quintuplet: {
-            float cx = fx, cy = fy, cz = fz, margin = 0.0f;
-            if (mode == Quintuplet) { // 1 tick adelante + margen hacia adentro
-                cx += tvx - evx; cy += tvy - evy; cz += tvz - evz; margin = 0.05f;
-            }
-            float hw = clampf(width * 0.5f - margin, 0.05f, 5.0f);
-            float px = clampf(eye.x, cx - hw, cx + hw);
-            float py = clampf(eye.y, cy + margin, cy + height - margin);
-            float pz = clampf(eye.z, cz - hw, cz + hw);
+        }
+        case Closest: {
+            // Punto del hitbox mas cercano a la mira real (por distancia).
+            float px = clampf(eye.x, fx - hw, fx + hw);
+            float py = clampf(eye.y, fy + 0.05f, fy + height - 0.05f);
+            float pz = clampf(eye.z, fz - hw, fz + hw);
             bool inside = (px == eye.x && py == eye.y && pz == eye.z);
-            if (inside) angleTo(cx - eye.x, cy + height * 0.6f - eye.y, cz - eye.z, wp, wy);
+            if (inside) angleTo(fx - eye.x, fy + height * 0.6f - eye.y, fz - eye.z, wp, wy);
             else angleTo(px - eye.x, py - eye.y, pz - eye.z, wp, wy);
-            if (mode == Closest) { sPitch = wp; sYaw = wy; }
-            else { float old = lockDeg; lockDeg = 15.0f; chase(wp, wy, 0.99f); lockDeg = old; }
+            sPitch = wp; sYaw = wy;
+            break;
+        }
+        case Quintuplet: {
+            // Como Closest, con 1 tick de prediccion y clavado casi instantaneo.
+            float cx = fx + rvx, cy = fy + rvy, cz = fz + rvz;
+            float px = clampf(eye.x, cx - hw + 0.05f, cx + hw - 0.05f);
+            float py = clampf(eye.y, cy + 0.05f, cy + height - 0.05f);
+            float pz = clampf(eye.z, cz - hw + 0.05f, cz + hw - 0.05f);
+            angleTo(px - eye.x, py - eye.y, pz - eye.z, wp, wy);
+            chase(wp, wy, 0.99f);
             break;
         }
         case Smooth: {
+            // Prediccion corta + giro proporcional a la distancia: rapido lejos, firme cerca.
             float k = dist * 0.1f;
-            angleTo(fx + (tvx - evx) * k - eye.x, fy + (tvy - evy) * k + height * 0.75f - eye.y,
-                    fz + (tvz - evz) * k - eye.z, wp, wy);
-            chase(wp, wy, clampf(14.0f / (dist + 2.0f), 0.7f, 0.95f));
+            pickAimPoint(fx + rvx * k, fy + rvy * k, fz + rvz * k, hw, height, eye, cur, wp, wy);
+            chase(wp, wy, clampf(14.0f / (dist + 2.0f), 0.9f, 1.0f));
             break;
         }
         case FrontsX: {
+            // Adelanto que crece con la distancia, punto de menor giro.
             float tk = (1.0f + dist * 0.1f) * 1.2f;
-            angleTo(fx + (tvx - evx) * tk - eye.x, fy + (tvy - evy) * tk + height * 0.5f + 0.3f - eye.y,
-                    fz + (tvz - evz) * tk - eye.z, wp, wy);
-            chase(wp, wy, clampf(16.0f / (dist + 1.0f), 0.5f, 0.95f));
+            pickAimPoint(fx + rvx * tk, fy + rvy * tk, fz + rvz * tk, hw, height, eye, cur, wp, wy);
+            chase(wp, wy, clampf(16.0f / (dist + 1.0f), 0.8f, 1.0f));
+            break;
+        }
+        case Predictor: {
+            // Adelanto corto + punto de menor giro; ganancia alta para no quedarse atras.
+            float tk = 1.0f + dist * 0.05f;
+            pickAimPoint(fx + rvx * tk, fy + rvy * tk, fz + rvz * tk, hw, height, eye, cur, wp, wy);
+            chase(wp, wy, 0.95f);
+            break;
+        }
+        case Halcon: {
+            // Persecucion: ganancia maxima cuando el error es grande, firme cuando ya esta encima.
+            float tk = 0.6f + dist * 0.05f;
+            pickAimPoint(fx + rvx * tk, fy + rvy * tk, fz + rvz * tk, hw, height, eye, cur, wp, wy);
+            float errNow = std::fabs(wrap180(wy - sYaw)) + std::fabs(wp - sPitch);
+            chase(wp, wy, errNow > 10.0f ? 1.0f : 0.85f);
             break;
         }
         case Astral: {
+            // Adelanto amplio y giro maximo: la mas agresiva de las de precision.
             float tk = (1.0f + dist * 0.1f) * 1.2f;
-            angleTo(fx + (tvx - evx) * tk - eye.x, fy + (tvy - evy) * tk + height * 0.55f + 0.3f - eye.y,
-                    fz + (tvz - evz) * tk - eye.z, wp, wy);
-            chase(wp, wy, 0.97f);
+            pickAimPoint(fx + rvx * tk, fy + rvy * tk, fz + rvz * tk, hw, height, eye, cur, wp, wy);
+            chase(wp, wy, 1.0f);
             break;
         }
     }

@@ -58,7 +58,7 @@ float offsetTextPlayerNearPosY = 0;
 float killRange = 4;
 float rotationsRange = 7;
 float mobAuraRange = 4;
-int maxKillTick = 3;
+int maxKillTick = 1; // 1 tick = maximo ritmo normal (antes 3)
 int maxMobAuraTick = 3;
 int maxAutoClickTick = 5;
 bool swing = true;
