@@ -477,8 +477,8 @@ void *NormalTick(LocalPlayer *thiz) {
 	globalPlayerRot = *playerRot;
 	globalPlayerPos = *playerPos;
 	if (TestFly::enabled && !isLANGame) TestFly::apply(playerPos); else TestFly::reset();
-	if (PopDetect::enabled) PopDetect::update(thiz->getHealth()); else PopDetect::reset();
-	if (Diag::dumpRequested) { Diag::dumpRequested = false; Diag::dumpPlayer(thiz, getAbsoluteAddress(MineLib, 0xC9486C8)); }
+	if (PopDetect::enabled) { PopDetect::update(thiz->getHealth()); PopDetect::checkTotem(thiz, thiz->getHealth(), getAbsoluteAddress(MineLib, 0xC9486C8)); } else PopDetect::reset();
+	if (Diag::dumpRequested) { Diag::dumpRequested = false; Diag::dumpPlayer(thiz, getAbsoluteAddress(MineLib, 0xC9486C8)); Diag::probeSymbol(getAbsoluteAddress(MineLib, 0x10724D88)); }
 	Level *myLevel = thiz->getLevel();
 	GameMode *myGameMode = thiz->getGameMode();
 	BlockSource *myBlockSource = thiz->getDimensionBlockSource();

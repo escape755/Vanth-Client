@@ -229,4 +229,28 @@ static inline void dumpPlayer(void *player, uintptr_t offhandFnAddr) {
     }
 }
 
+
+// SONDA de simbolo (solo lectura): lee la direccion de VanillaItemNames::TotemOfUndying (tabla de simbolos).
+// Si ahi hay un puntero, sigue el puntero y busca el nombre del tótem. Si no, lo dice.
+static inline void probeSymbol(uintptr_t symAddr) {
+    lines.push_back("--- sonda simbolo TotemOfUndying ---");
+    unsigned long long ptr = NOREAD;
+    if (!symAddr || !SafeRead((const void *) symAddr, &ptr, 8)) {
+        lines.push_back("direccion no legible");
+        lines.push_back("--- fin sonda simbolo ---");
+        return;
+    }
+    char b[160];
+    snprintf(b, sizeof(b), "valor en la direccion = %016llx", ptr);
+    lines.push_back(b);
+    if ((ptr >> 56) == 0xB4ULL || (ptr >> 40) != 0) {
+        long r = FindTextAt((const void *) (uintptr_t) (ptr & 0x00FFFFFFFFFFFFFFULL), "totem_of_undying", 0x200);
+        snprintf(b, sizeof(b), "NOMBRE desde ese puntero: %s", r >= 0 ? "SI" : "no");
+        lines.push_back(b);
+    } else {
+        lines.push_back("el valor no parece un puntero");
+    }
+    lines.push_back("--- fin sonda simbolo ---");
+}
+
 } // namespace Diag
