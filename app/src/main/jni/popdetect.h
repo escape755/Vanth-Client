@@ -44,7 +44,7 @@ static inline void checkTotem(void *player, int health, uintptr_t fnAddr) {
     if (!SafeRead((const void *) fnAddr, &pro, 4) || pro != 0xA9BF7BFDu) return; // prologo no coincide
     typedef void *(*GetOffhandFn)(void *);
     void *slot = ((GetOffhandFn) fnAddr)(player);
-    offhandHasTotem = slot && Diag::FindTextAt(slot, "totem_of_undying", 0x200) >= 0;
+    offhandHasTotem = true; // NO VERIFICADO: ver diag.h
 }
 
 } // namespace PopDetect

@@ -2,6 +2,7 @@
 // DIAGNOSTICO solo lectura. Modo "solo cambios":
 //  1a pulsacion: guarda la referencia (baseline) y muestra "referencia guardada".
 //  siguientes:   muestra SOLO las lineas cuyo valor cambio respecto a la referencia anterior.
+#include <cstdint>
 #include <cstdio>
 #include <cstring>
 
@@ -56,7 +57,7 @@ static inline long FindTextAt(const void *base, const char *needle, size_t span)
     return -1;
 }
 
-static inline void dumpPlayer(void *player, uintptr_t offhandFnAddr) {
+static inline void dumpPlayer(void *player, uintptr_t offhandFnAddr, uintptr_t totemSymAddr = 0) {
     lines.clear();
     if (!player) { lines.push_back("player = NULL"); return; }
     std::vector<unsigned long long> vals;
@@ -197,6 +198,20 @@ static inline void dumpPlayer(void *player, uintptr_t offhandFnAddr) {
                     char sb[96];
                     snprintf(sb, sizeof(sb), "  slot+%02x: %016llx", k * 8, sw[k]);
                     lines.push_back(sb);
+                }
+                // COMPARACION: slot+00 frente al valor de VanillaItemNames::TotemOfUndying (tiempo de ejecucion).
+                // Si coinciden, slot+00 es el Item del tótem y el detector puede usar esta comparacion.
+                if (totemSymAddr) {
+                    unsigned long long tp = NOREAD;
+                    if (SafeRead((const void *) totemSymAddr, &tp, 8)) {
+                        char cb[160];
+                        snprintf(cb, sizeof(cb), "TotemOfUndying(simbolo) apunta a: %016llx", tp);
+                        lines.push_back(cb);
+                        snprintf(cb, sizeof(cb), "slot+00 == TotemOfUndying: %s", sw[0] == tp ? "SI" : "no");
+                        lines.push_back(cb);
+                    } else {
+                        lines.push_back("TotemOfUndying(simbolo): no legible");
+                    }
                 }
                 int hits = 0;
                 for (int k = 0; k < 16; k++) {

@@ -83,6 +83,23 @@ namespace Offsets64 {
 	};
 }
 
+// ---- Simbolos de inventario (libminecraftpe 1.21.111, ARM64) ----
+// Tabla de simbolos proporcionada por el usuario. Usar siempre via getAbsoluteAddress(MineLib, ...).
+namespace InvSym64 {
+	constexpr uintptr_t LocalPlayer_sendInventoryTransaction = 0x6BF3A80;
+	constexpr uintptr_t InventoryTransaction_addAction       = 0xD4566F0;
+	constexpr uintptr_t InventoryTransaction_dtor            = 0x932AD80;
+	constexpr uintptr_t InventoryAction_dtor                 = 0x58B50C8;
+	constexpr uintptr_t NetworkItemStackDescriptor_ctor      = 0xD3F4DDC;
+	constexpr uintptr_t ItemStack_copyCtor                   = 0xD3DFE40;
+	constexpr uintptr_t Actor_getOffhandSlot                 = 0xC9486C8;
+	constexpr uintptr_t ItemStackBase_isInstance             = 0xD3E11AC;
+	constexpr uintptr_t ItemStackBase_isNull                 = 0xD3E3D80;
+	constexpr uintptr_t ItemStack_EMPTY_ITEM                 = 0x10724D88;
+	constexpr uintptr_t VanillaItemNames_TotemOfUndying      = 0x10722418;
+	constexpr uintptr_t VanillaItemNames_Shield              = 0x10721D60;
+}
+
 namespace Fields64 {
 	enum Fields64 {
 		GetGamemode = 0x9C0,//Player::getGameMode

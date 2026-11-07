@@ -105,6 +105,7 @@ NoCaveVignette
 #include "hook_classes.h"
 #include "testfly.h"
 #include "popdetect.h"
+#include "autototem.h"
 #include "diag.h"
 #include "bgimage.h"
 #include "variables.h"
@@ -478,7 +479,8 @@ void *NormalTick(LocalPlayer *thiz) {
 	globalPlayerPos = *playerPos;
 	if (TestFly::enabled && !isLANGame) TestFly::apply(playerPos); else TestFly::reset();
 	if (PopDetect::enabled) { PopDetect::update(thiz->getHealth()); PopDetect::checkTotem(thiz, thiz->getHealth(), getAbsoluteAddress(MineLib, 0xC9486C8)); } else PopDetect::reset();
-	if (Diag::dumpRequested) { Diag::dumpRequested = false; Diag::dumpPlayer(thiz, getAbsoluteAddress(MineLib, 0xC9486C8)); Diag::probeSymbol(getAbsoluteAddress(MineLib, 0x10724D88)); }
+	AutoTotem::update(thiz, thiz->getHealth(), getAbsoluteAddress(MineLib, InvSym64::Actor_getOffhandSlot));
+	if (Diag::dumpRequested) { Diag::dumpRequested = false; Diag::dumpPlayer(thiz, getAbsoluteAddress(MineLib, 0xC9486C8), getAbsoluteAddress(MineLib, InvSym64::VanillaItemNames_TotemOfUndying)); Diag::probeSymbol(getAbsoluteAddress(MineLib, InvSym64::VanillaItemNames_TotemOfUndying)); }
 	Level *myLevel = thiz->getLevel();
 	GameMode *myGameMode = thiz->getGameMode();
 	BlockSource *myBlockSource = thiz->getDimensionBlockSource();

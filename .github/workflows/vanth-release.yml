@@ -1,0 +1,70 @@
+name: Build and Release libReverseSigma
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        abi: [arm64-v8a, armeabi-v7a]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1
+        id: ndk
+        with:
+          ndk-version: r26d
+          add-to-path: true
+
+      - name: Build ${{ matrix.abi }}
+        working-directory: app/src/main/jni
+        env:
+          NDK_PROJECT_PATH: ${{ github.workspace }}/app/src/main
+          NDK_LIBS_OUT: ${{ runner.temp }}/out/libs
+          NDK_OUT: ${{ runner.temp }}/out/obj
+        run: |
+          ndk-build -j"$(nproc)" APP_ABI=${{ matrix.abi }} NDK_DEBUG=0 \
+            APP_BUILD_SCRIPT=Android.mk APP_PLATFORM=android-28
+
+      - name: Package
+        run: |
+          set -euo pipefail
+          SRC="$RUNNER_TEMP/out/libs/${{ matrix.abi }}/libReverseSigma.so"
+          test -f "$SRC" || { echo "No se genero $SRC"; exit 1; }
+          mkdir -p dist
+          cp "$SRC" "dist/libReverseSigma-${{ matrix.abi }}.so"
+          ( cd dist && sha256sum "libReverseSigma-${{ matrix.abi }}.so" > "libReverseSigma-${{ matrix.abi }}.so.sha256" )
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: libReverseSigma-${{ matrix.abi }}
+          path: dist/*
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Show files
+        run: ls -la dist
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true

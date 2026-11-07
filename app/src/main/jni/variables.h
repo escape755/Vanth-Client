@@ -299,6 +299,8 @@ void saveConfig(std::string path) {
 	cfg["popDetect"] = PopDetect::enabled;
 	cfg["popDrop"] = PopDetect::dropThreshold;
 	cfg["popLow"] = PopDetect::lowHealth;
+	cfg["autoTotem"] = AutoTotem::enabled;
+	cfg["autoTotemAt"] = AutoTotem::triggerHealth;
 	cfg["tfHSpeed"] = TestFly::hSpeedBps;
 	cfg["tfUp"] = TestFly::upBps;
 	cfg["tfDown"] = TestFly::downBps;
@@ -517,6 +519,8 @@ void loadConfig(std::string path){
 	PopDetect::enabled = cfg.value("popDetect", PopDetect::enabled);
 	PopDetect::dropThreshold = cfg.value("popDrop", PopDetect::dropThreshold);
 	PopDetect::lowHealth = cfg.value("popLow", PopDetect::lowHealth);
+	AutoTotem::enabled = cfg.value("autoTotem", AutoTotem::enabled);
+	AutoTotem::triggerHealth = cfg.value("autoTotemAt", AutoTotem::triggerHealth);
 	TestFly::hSpeedBps = cfg.value("tfHSpeed", TestFly::hSpeedBps);
 	TestFly::upBps = cfg.value("tfUp", TestFly::upBps);
 	TestFly::downBps = cfg.value("tfDown", TestFly::downBps);
