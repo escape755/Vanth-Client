@@ -479,8 +479,12 @@ void *NormalTick(LocalPlayer *thiz) {
 	globalPlayerPos = *playerPos;
 	if (TestFly::enabled && !isLANGame) TestFly::apply(playerPos); else TestFly::reset();
 	if (PopDetect::enabled) { PopDetect::update(thiz->getHealth()); PopDetect::checkTotem(thiz, thiz->getHealth(), getAbsoluteAddress(MineLib, 0xC9486C8)); } else PopDetect::reset();
+#if defined(__aarch64__)
 	AutoTotem::update(thiz, thiz->getHealth(), getAbsoluteAddress(MineLib, InvSym64::Actor_getOffhandSlot));
+#endif
+#if defined(__aarch64__)
 	if (Diag::dumpRequested) { Diag::dumpRequested = false; Diag::dumpPlayer(thiz, getAbsoluteAddress(MineLib, 0xC9486C8), getAbsoluteAddress(MineLib, InvSym64::VanillaItemNames_TotemOfUndying)); Diag::probeSymbol(getAbsoluteAddress(MineLib, InvSym64::VanillaItemNames_TotemOfUndying)); }
+#endif
 	Level *myLevel = thiz->getLevel();
 	GameMode *myGameMode = thiz->getGameMode();
 	BlockSource *myBlockSource = thiz->getDimensionBlockSource();
