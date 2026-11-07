@@ -481,7 +481,7 @@ void *NormalTick(LocalPlayer *thiz) {
 	if (TestFly::enabled && !isLANGame) TestFly::apply(playerPos); else TestFly::reset();
 	if (PopDetect::enabled) { PopDetect::update(thiz->getHealth()); PopDetect::checkTotem(thiz, thiz->getHealth(), getAbsoluteAddress(MineLib, 0xC9486C8)); } else PopDetect::reset();
 #if defined(__aarch64__)
-	if (TxCapture::armed) TxCapture::install(getAbsoluteAddress(MineLib, InvSym64::LocalPlayer_sendInventoryTransaction));
+	if (TxCapture::armed) TxCapture::install(getAbsoluteAddress(MineLib, TxCapture::SendRva));
 	AutoTotem::update(thiz, thiz->getHealth(), getAbsoluteAddress(MineLib, InvSym64::Actor_getOffhandSlot));
 #endif
 #if defined(__aarch64__)
