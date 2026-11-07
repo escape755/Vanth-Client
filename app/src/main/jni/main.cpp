@@ -79,6 +79,7 @@ bool g_Initialized = false;
 ImGuiWindow* g_window = NULL;
 string GameName = oxorany("com.mojang.minecraftpe");
 const char* MineLib = OBFUSCATE("libminecraftpe.so");
+#include "txcapture.h"
 
 
 struct My_Patches {MemoryPatch
@@ -480,6 +481,7 @@ void *NormalTick(LocalPlayer *thiz) {
 	if (TestFly::enabled && !isLANGame) TestFly::apply(playerPos); else TestFly::reset();
 	if (PopDetect::enabled) { PopDetect::update(thiz->getHealth()); PopDetect::checkTotem(thiz, thiz->getHealth(), getAbsoluteAddress(MineLib, 0xC9486C8)); } else PopDetect::reset();
 #if defined(__aarch64__)
+	if (TxCapture::armed) TxCapture::install(getAbsoluteAddress(MineLib, InvSym64::LocalPlayer_sendInventoryTransaction));
 	AutoTotem::update(thiz, thiz->getHealth(), getAbsoluteAddress(MineLib, InvSym64::Actor_getOffhandSlot));
 #endif
 #if defined(__aarch64__)
