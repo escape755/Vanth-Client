@@ -1,3 +1,5 @@
+#pragma once
+#include <cstdint>
 #if defined(__aarch64__)
 namespace Offsets64 {
 	enum Offsets64 {
